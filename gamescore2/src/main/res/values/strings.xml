@@ -1,0 +1,47 @@
+<resources>
+
+    <string name="app_name">Game Score 2</string>
+
+    <string name="page_title_main">Main Screen</string>
+    <string name="page_title_default">Default Screen</string>
+
+    <string name="btn_submit">Submit</string>
+    <string name="et_hint">Score</string>
+
+    <string name="action_add">Add new player</string>
+    <string name="add_title">Add new player</string>
+    <string name="add_et">Enter player name</string>
+    <string name="add_btn_ok">OK</string>
+    <string name="add_btn_cancel">Cancel</string>
+
+    <string name="action_delete">Delete player</string>
+
+    <string name="action_clear">Clear score</string>
+
+    <string name="action_use_default">Use default</string>
+    <string name="action_back">Back</string>
+    <string name="default_name_player1">Player 1</string>
+    <string name="default_name_player2">Player 2</string>
+    <string name="default_name_player3">Player 3</string>
+    <string name="default_name_player4">Player 4</string>
+    <string name="default_name_player5">Player 5</string>
+    <string name="default_name_player6">Player 6</string>
+    <string name="default_name_player7">Player 7</string>
+    <string name="default_name_player8">Player 8</string>
+
+    <string name="action_about">About</string>
+    <string name="about_title">About program</string>
+    <string name="about_btn_text">OK</string>
+    <string name="about_text"><div aligin="center">This application is used for scoring in games.\nEnjoy your game!\n<B>Created by\nshev4enkostr</B></div></string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="action_exit">Exit</string>
+    <string name="exit_title">Exit</string>
+    <string name="exit_message">Are you sure?</string>
+
+    <string name="toast_max_number_of_players">Max number of players!</string>
+    <string name="toast_enter_name">Please, enter Player name!</string>
+    <string name="toast_no_name">You are not enter any name...</string>
+
+</resources>
