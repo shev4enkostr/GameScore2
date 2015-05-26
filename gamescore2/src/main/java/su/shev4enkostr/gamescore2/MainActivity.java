@@ -8,12 +8,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.support.v4.view.*;
+import android.widget.*;
+import android.text.*;
 
 public class MainActivity extends FragmentActivity
 {
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
+	private Toast backPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -24,6 +27,11 @@ public class MainActivity extends FragmentActivity
         viewPager = (ViewPager) findViewById(R.id.ViewPager);
         pagerAdapter = new AppFragmentPagerAdapter(getSupportFragmentManager(), getApplicationContext());
         viewPager.setAdapter(pagerAdapter);
+		
+		PagerTabStrip pts = (PagerTabStrip) findViewById(R.id.tab_strip);
+		pts.setDrawFullUnderline(true);
+		pts.setTabIndicatorColorResource(android.R.color.holo_blue_bright);
+		//android.R.drawable.
     }
 
     @Override
@@ -50,4 +58,19 @@ public class MainActivity extends FragmentActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+	@Override
+	public void onBackPressed()
+	{
+		if (backPressed != null && backPressed.getView().getWindowToken() != null)
+		{
+			super.onBackPressed();
+		}
+			
+		else
+		{
+			backPressed = Toast.makeText(this, R.string.toast_exit, Toast.LENGTH_SHORT);
+			backPressed.show();
+		}
+	}
 }

@@ -1,25 +1,23 @@
 package su.shev4enkostr.gamescore2;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import java.util.ArrayList;
+import android.content.*;
+import android.graphics.*;
+import android.view.*;
+import android.view.View.*;
+import android.widget.*;
+import java.util.*;
+import android.preference.*;
 
 /**
  * Created by stas on 20.05.15.
  */
-public class AppListAdapter extends BaseAdapter
+public class AppListAdapter extends BaseAdapter implements OnTouchListener
 {
     private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<Players> data;
+	
+	//private EditText et;
 
     public AppListAdapter(Context context, ArrayList<Players> data)
     {
@@ -37,18 +35,26 @@ public class AppListAdapter extends BaseAdapter
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup)
     {
-        View view = convertView;
+        ViewHolder holder;
+		View view = convertView;
+		
         if (view == null)
         {
             view = layoutInflater.inflate(R.layout.list_item, viewGroup, false);
+			holder = new ViewHolder();
+			holder.etHolder = (EditText) view.findViewById(R.id.et_enter_score_player);
+			view.setTag(holder);
         }
+		
+		else
+			holder = (ViewHolder) view.getTag();
 
         Players player = (Players) getItem(position);
 
         ((TextView) view.findViewById(R.id.tv_name_player)).setText(player.getName());
         ((TextView) view.findViewById(R.id.tv_score_player)).setText(String.valueOf(player.getScore()));
-
-        //((ProgressBar) view.findViewById(R.id.pr_bar_load)).getProgressDrawable().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
+		
+		EditText et = (EditText) view.findViewById(R.id.et_enter_score_player);
 
         int i = player.getScore();
         ProgressBar pb = (ProgressBar) view.findViewById(R.id.pr_bar_load);
@@ -62,11 +68,18 @@ public class AppListAdapter extends BaseAdapter
 
         else
             pb.getProgressDrawable().setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-
+		
+		//ViewHolder holder = new ViewHolder();
+		//holder.etHolder = et;
+			
+		holder.etHolder.setOnTouchListener(this);
+		view.setOnTouchListener(this);
+		view.setTag(holder);
+			
         return view;
     }
-
-    @Override
+	
+	@Override
     public Object getItem(int position)
     {
         return data.get(position);
@@ -77,4 +90,29 @@ public class AppListAdapter extends BaseAdapter
     {
         return position;
     }
+	
+	private static class ViewHolder
+	{
+		private EditText etHolder;
+	}
+	
+	@Override
+	public boolean onTouch(View view, MotionEvent motionEvent)
+	{
+		if (view instanceof EditText)
+		{
+			EditText et = (EditText) view;
+			et.setFocusable(true);
+			et.setFocusableInTouchMode(true);
+		}
+		
+		else
+		{
+			ViewHolder holder = (ViewHolder) view.getTag();
+			holder.etHolder.setFocusable(false);
+			holder.etHolder.setFocusableInTouchMode(false);
+		}
+		
+		return false;
+	}
 }

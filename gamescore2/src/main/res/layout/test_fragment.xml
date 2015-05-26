@@ -7,13 +7,12 @@
     android:layout_height="match_parent">
 
     <ListView
-        android:id="@+id/android:list"
+        android:id="@+id/list"
 		android:divider="@android:color/holo_blue_bright"
 		android:dividerHeight="2px"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-		android:descendantFocusability="beforeDescendants"/>
+        android:layout_weight="1"/>
 
   	<View
 		android:layout_width="fill_parent"

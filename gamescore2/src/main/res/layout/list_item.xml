@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+	style="@style/activated"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="3dp"
@@ -67,7 +68,11 @@
                 android:hint="@string/et_hint"
                 android:inputType="numberSigned"
                 android:textSize="30dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+				android:focusableInTouchMode="true"/>
+				<!--android:focusable="false"-->
+				<!--android:focusableInTouchMode="true"-->
+			
         </LinearLayout>
     </LinearLayout>
 
@@ -77,7 +82,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal|center_vertical"
+		android:layout_marginLeft="10dp"
+		android:layout_marginRight="10dp"
         android:max="100"
-        android:progress="50"/>
+        android:progress="0"/>
 
 </LinearLayout>

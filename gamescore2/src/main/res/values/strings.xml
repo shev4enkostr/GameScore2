@@ -2,8 +2,8 @@
 
     <string name="app_name">Game Score 2</string>
 
-    <string name="page_title_main">Main Screen</string>
-    <string name="page_title_default">Default Screen</string>
+    <string name="page_title_main">MAIN SCREEN</string>
+    <string name="page_title_default">DEFAULT SCREEN</string>
 
     <string name="btn_submit">Submit</string>
     <string name="et_hint">Score</string>
@@ -15,6 +15,10 @@
     <string name="add_btn_cancel">Cancel</string>
 
     <string name="action_delete">Delete player</string>
+	
+	<string name="action_undo">Undo</string>
+	
+	<string name="action_redo">Redo</string>
 
     <string name="action_clear">Clear score</string>
 
@@ -39,9 +43,14 @@
     <string name="action_exit">Exit</string>
     <string name="exit_title">Exit</string>
     <string name="exit_message">Are you sure?</string>
+	
+	<string name="action_mode_title">Select players:</string>
+	<string name="action_mode_subtitle_one_player">One player selected</string>
+	<string name="action_mode_subtitle_more_players">players selected</string>
 
     <string name="toast_max_number_of_players">Max number of players!</string>
     <string name="toast_enter_name">Please, enter Player name!</string>
     <string name="toast_no_name">You are not enter any name...</string>
+	<string name="toast_exit">Press back again to exit from GameScore2</string>
 
 </resources>
