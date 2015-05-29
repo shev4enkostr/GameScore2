@@ -9,6 +9,8 @@ import android.widget.AbsListView.*;
 import java.util.*;
 
 import android.view.View.OnClickListener;
+import android.preference.*;
+import android.content.*;
 
 /**
  * Created by stas on 20.05.15.
@@ -19,22 +21,33 @@ public class MainListFragment extends ListFragment implements OnClickListener, M
 
 	private ArrayList<Players> data;
     private AppListAdapter adapter;
+	
+	private SharedPreferences sharedPref;
+	private int maxNumberOfPlayers;
 
     private String[] name = new String[] {"Stas", "Oksana", "Igor", "Nadya", "Alex", "Sasha", "Lena", "Radik"};
     private String[] score = new String[] {"10", "35", "75", "95", "40", "-20", "65", "100"};
-
+	
+	private static final String NUMBER_OF_PLAYERS = "preference_dialog";
+	private static final int MIN_SEEK_POSITION = 2;
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+		
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        data = new ArrayList<>();
+		//createPlayers();
+		
+		maxNumberOfPlayers = (sharedPref.getInt(NUMBER_OF_PLAYERS, 1)) + MIN_SEEK_POSITION;
 
-        for (int i = 0; i < name.length; i++)
+		data = new ArrayList<>();
+
+        for (int i = 0; i < maxNumberOfPlayers; i++)
         {
             data.add(new Players(name[i], Integer.parseInt(score[i])));
         }
-
+		
         setHasOptionsMenu(true);
 		
 		adapter = new AppListAdapter(getActivity(), data);
@@ -59,6 +72,14 @@ public class MainListFragment extends ListFragment implements OnClickListener, M
 		
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setMultiChoiceModeListener(this);
+	}
+
+	@Override
+	public void onResume()
+	{
+		createPlayers();
+		adapter.notifyDataSetChanged();
+		super.onResume();
 	}
 
 	@Override
@@ -127,5 +148,19 @@ public class MainListFragment extends ListFragment implements OnClickListener, M
 				mode.setSubtitle(checkedCount + " " + getResources().getString(R.string.action_mode_subtitle_more_players));
 				break;
 		}
+	}
+	
+	public void createPlayers()
+	{
+		maxNumberOfPlayers = (sharedPref.getInt(NUMBER_OF_PLAYERS, 1)) + MIN_SEEK_POSITION;
+		
+		data = new ArrayList<>();
+
+        for (int i = 0; i < maxNumberOfPlayers; i++)
+        {
+            data.add(new Players(name[i], Integer.parseInt(score[i])));
+        }
+		
+		//adapter.notifyDataSetChanged();
 	}
 }

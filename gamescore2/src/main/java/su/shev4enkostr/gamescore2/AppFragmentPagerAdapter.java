@@ -52,4 +52,13 @@ public class AppFragmentPagerAdapter extends FragmentPagerAdapter
 
         else return null;
     }
+
+	@Override
+	public int getItemPosition(Object object)
+	{
+		// TODO: Implement this method
+		//return super.getItemPosition(object);
+		
+		return POSITION_NONE;
+	}
 }

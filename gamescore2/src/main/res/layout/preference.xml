@@ -1,0 +1,36 @@
+<?xml version = "1.0" encoding="utf-8" ?>
+<PreferenceScreen
+	xmlns:android ="http://schemas.android.com/apk/res/android" 
+	xmlns:example ="http://schemas.android.com/apk/res/su.shev4enkostr.gamescore2" >
+
+	<PreferenceCategory
+		android:key="category_default"
+		android:title="@string/pref_category_general_title">
+		
+		<su.shev4enkostr.gamescore2.AppDialogPreference
+			android:key="preference_dialog"
+			android:title="@string/pref_dialog_seek_title"
+			android:summary="@string/pref_dialog_seek_summary"
+			android:dialogLayout="@layout/dialog_preference"
+			android:positiveButtonText="OK"
+			android:negativeButtonText="@null"
+			android:persistent="true"
+			android:defaultValue="8"
+			example:minValue="2"
+			example:maxValue="20"/>
+		
+	</PreferenceCategory>
+	
+	<PreferenceCategory
+		android:key="category_default"
+		android:title="@string/pref_category_about_title">
+		
+		<su.shev4enkostr.gamescore2.AppDialogPreferenceAbout
+			android:key="pref_dialog_about"
+			android:title="@string/pref_dialog_about_title"
+			android:summary="@string/pref_dialog_about_summary"
+			android:dialogMessage="@string/pref_dialog_about_message"
+			android:negativeButtonText="@null"/>
+		
+	</PreferenceCategory>
+</PreferenceScreen>

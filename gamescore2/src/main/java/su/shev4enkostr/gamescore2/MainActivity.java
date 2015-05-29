@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.support.v4.view.*;
 import android.widget.*;
 import android.text.*;
+import android.content.*;
+import android.preference.*;
 
 public class MainActivity extends FragmentActivity
 {
@@ -31,8 +33,16 @@ public class MainActivity extends FragmentActivity
 		PagerTabStrip pts = (PagerTabStrip) findViewById(R.id.tab_strip);
 		pts.setDrawFullUnderline(true);
 		pts.setTabIndicatorColorResource(android.R.color.holo_blue_bright);
-		//android.R.drawable.
+		
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
     }
+
+	@Override
+	protected void onResume()
+	{
+		pagerAdapter.notifyDataSetChanged();
+		super.onResume();
+	}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -53,7 +63,9 @@ public class MainActivity extends FragmentActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
-            return true;
+            item.setIntent(new Intent(this, AppPreferenceActivity.class));
+			//Intent intent = new Intent(this, AppPreferenceActivity.class);
+			//startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

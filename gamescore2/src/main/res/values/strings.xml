@@ -8,6 +8,8 @@
     <string name="btn_submit">Submit</string>
     <string name="et_hint">Score</string>
 
+	<!-- Menu strings -->
+	
     <string name="action_add">Add new player</string>
     <string name="add_title">Add new player</string>
     <string name="add_et">Enter player name</string>
@@ -23,7 +25,9 @@
     <string name="action_clear">Clear score</string>
 
     <string name="action_use_default">Use default</string>
+	
     <string name="action_back">Back</string>
+	
     <string name="default_name_player1">Player 1</string>
     <string name="default_name_player2">Player 2</string>
     <string name="default_name_player3">Player 3</string>
@@ -44,10 +48,27 @@
     <string name="exit_title">Exit</string>
     <string name="exit_message">Are you sure?</string>
 	
+	<!-- Action mode strings -->
+	
 	<string name="action_mode_title">Select players:</string>
 	<string name="action_mode_subtitle_one_player">One player selected</string>
 	<string name="action_mode_subtitle_more_players">players selected</string>
+	
+	<!-- Preference strings -->
+		
+	<string name="pref_category_general_title">General</string>
+		
+		<string name="pref_dialog_seek_title">Max number of players</string>
+		<string name="pref_dialog_seek_summary">Max number of players in application</string>
+	
+	<string name="pref_category_about_title">Other</string>
+	
+		<string name="pref_dialog_about_title">About program</string>
+	<string name="pref_dialog_about_message"><div aligin="center">This application is used for scoring in games.\nEnjoy your game!\n<B>Created by\nshev4enkostr</B></div></string>
+		<string name="pref_dialog_about_summary">About this program</string>
 
+	<!-- Toasts strings -->
+	
     <string name="toast_max_number_of_players">Max number of players!</string>
     <string name="toast_enter_name">Please, enter Player name!</string>
     <string name="toast_no_name">You are not enter any name...</string>
