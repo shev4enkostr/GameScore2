@@ -6,6 +6,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.view.*;
@@ -20,9 +21,12 @@ public class MainActivity extends FragmentActivity
     private PagerAdapter pagerAdapter;
 	private Toast backPressed;
 
+    private static final String LOG = "gamescore2";
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Log.d(LOG, "MainActivity onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -33,14 +37,13 @@ public class MainActivity extends FragmentActivity
 		PagerTabStrip pts = (PagerTabStrip) findViewById(R.id.tab_strip);
 		pts.setDrawFullUnderline(true);
 		pts.setTabIndicatorColorResource(android.R.color.holo_blue_bright);
-		
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
     }
 
 	@Override
 	protected void onResume()
 	{
-		pagerAdapter.notifyDataSetChanged();
+		Log.d(LOG, "MainActivity onResume()");
+        pagerAdapter.notifyDataSetChanged();
 		super.onResume();
 	}
 

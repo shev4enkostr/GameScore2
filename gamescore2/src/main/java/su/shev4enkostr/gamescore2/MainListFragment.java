@@ -2,6 +2,7 @@ package su.shev4enkostr.gamescore2;
 
 import android.os.*;
 import android.support.v4.app.*;
+import android.util.Log;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
@@ -30,10 +31,15 @@ public class MainListFragment extends ListFragment implements OnClickListener, M
 	
 	private static final String NUMBER_OF_PLAYERS = "preference_dialog";
 	private static final int MIN_SEEK_POSITION = 2;
+
+	private static final String LOG = "gamescore2";
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
+		Log.d(LOG, "MainListFragment onCreate()");
+
+		super.onCreate(savedInstanceState);
 		
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -57,7 +63,9 @@ public class MainListFragment extends ListFragment implements OnClickListener, M
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-       	View view = inflater.inflate(R.layout.fragment, null);
+       	Log.d(LOG, "MainListFragment onCreateView()");
+
+		View view = inflater.inflate(R.layout.fragment, null);
 		
 		btnSubmit = (Button) view.findViewById(R.id.btn_submit);
 		btnSubmit.setOnClickListener(this);
@@ -68,19 +76,23 @@ public class MainListFragment extends ListFragment implements OnClickListener, M
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
+		Log.d(LOG, "MainListFragment onActivityCreated()");
+
 		super.onActivityCreated(savedInstanceState);
 		
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		getListView().setMultiChoiceModeListener(this);
 	}
 
-	@Override
+	/*@Override
 	public void onResume()
 	{
+		Log.d(LOG, "MainListFragment onResume()");
+
 		createPlayers();
 		adapter.notifyDataSetChanged();
 		super.onResume();
-	}
+	}*/
 
 	@Override
 	public void onClick(View view)
@@ -150,7 +162,7 @@ public class MainListFragment extends ListFragment implements OnClickListener, M
 		}
 	}
 	
-	public void createPlayers()
+	/*public void createPlayers()
 	{
 		maxNumberOfPlayers = (sharedPref.getInt(NUMBER_OF_PLAYERS, 1)) + MIN_SEEK_POSITION;
 		
@@ -161,6 +173,6 @@ public class MainListFragment extends ListFragment implements OnClickListener, M
             data.add(new Players(name[i], Integer.parseInt(score[i])));
         }
 		
-		//adapter.notifyDataSetChanged();
-	}
+		adapter.notifyDataSetChanged();
+	}*/
 }

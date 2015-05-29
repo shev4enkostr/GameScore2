@@ -7,11 +7,13 @@ public class Players
 {
     private String name = "no name";
     private int score = 0;
+    private int numberOfPlayer = 0;
 
-    private static int numberOfPlayer = 0;
+    private static int nextNumberOfPlayer = 0;
 
     {
         numberOfPlayer++;
+        nextNumberOfPlayer++;
     }
 
     public Players(String name, int score)
@@ -38,9 +40,9 @@ public class Players
         this.score = score;
     }
 
-    public static int getNumberOfPlayer()
+    public static int getNextNumberOfPlayer()
     {
-        return numberOfPlayer;
+        return nextNumberOfPlayer;
     }
 
     public String getName()
@@ -51,6 +53,11 @@ public class Players
     public int getScore()
     {
         return this.score;
+    }
+
+    public int getNumberOfPlayer()
+    {
+        return this.numberOfPlayer;
     }
 
     public void addScore(int score)

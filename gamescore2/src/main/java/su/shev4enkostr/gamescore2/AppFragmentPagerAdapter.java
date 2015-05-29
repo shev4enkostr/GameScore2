@@ -9,7 +9,7 @@ import android.support.v4.app.*;
 /**
  * Created by stas on 20.05.15.
  */
-public class AppFragmentPagerAdapter extends FragmentPagerAdapter
+public class AppFragmentPagerAdapter extends FragmentStatePagerAdapter
 {
     private static final int PAGE_COUNT = 2;
 	
@@ -56,8 +56,7 @@ public class AppFragmentPagerAdapter extends FragmentPagerAdapter
 	@Override
 	public int getItemPosition(Object object)
 	{
-		// TODO: Implement this method
-		//return super.getItemPosition(object);
+        //return super.getItemPosition(object);
 		
 		return POSITION_NONE;
 	}
