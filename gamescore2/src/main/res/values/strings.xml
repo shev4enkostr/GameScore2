@@ -7,6 +7,8 @@
 
     <string name="btn_submit">Submit</string>
     <string name="et_hint">Score</string>
+	
+	<string name="default_name_player">Player</string>
 
 	<!-- Menu strings -->
 	
@@ -27,15 +29,6 @@
     <string name="action_use_default">Use default</string>
 	
     <string name="action_back">Back</string>
-	
-    <string name="default_name_player1">Player 1</string>
-    <string name="default_name_player2">Player 2</string>
-    <string name="default_name_player3">Player 3</string>
-    <string name="default_name_player4">Player 4</string>
-    <string name="default_name_player5">Player 5</string>
-    <string name="default_name_player6">Player 6</string>
-    <string name="default_name_player7">Player 7</string>
-    <string name="default_name_player8">Player 8</string>
 
     <string name="action_about">About</string>
     <string name="about_title">About program</string>

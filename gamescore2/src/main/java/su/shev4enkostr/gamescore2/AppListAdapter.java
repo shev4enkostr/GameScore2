@@ -16,8 +16,6 @@ public class AppListAdapter extends BaseAdapter implements OnTouchListener
     private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<Players> data;
-	
-	//private EditText et;
 
     public AppListAdapter(Context context, ArrayList<Players> data)
     {
@@ -50,12 +48,10 @@ public class AppListAdapter extends BaseAdapter implements OnTouchListener
 			holder = (ViewHolder) view.getTag();
 
         Players player = (Players) getItem(position);
-
+		
         ((TextView) view.findViewById(R.id.tv_name_player)).setText(player.getName());
         ((TextView) view.findViewById(R.id.tv_score_player)).setText(String.valueOf(player.getScore()));
 		
-		EditText et = (EditText) view.findViewById(R.id.et_enter_score_player);
-
         int i = player.getScore();
         ProgressBar pb = (ProgressBar) view.findViewById(R.id.pr_bar_load);
         pb.setProgress(i);
@@ -105,14 +101,12 @@ public class AppListAdapter extends BaseAdapter implements OnTouchListener
 			et.setFocusable(true);
 			et.setFocusableInTouchMode(true);
 		}
-		
 		else
 		{
 			ViewHolder holder = (ViewHolder) view.getTag();
 			holder.etHolder.setFocusable(false);
 			holder.etHolder.setFocusableInTouchMode(false);
 		}
-		
 		return false;
 	}
 }

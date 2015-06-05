@@ -1,8 +1,8 @@
 package su.shev4enkostr.gamescore2;
 
-import android.content.SharedPreferences;
+import android.content.*;
 import android.os.*;
-import android.preference.PreferenceManager;
+import android.preference.*;
 import android.support.v4.app.*;
 import android.view.*;
 import android.view.View.*;
@@ -16,19 +16,17 @@ public class DefaultListFragment extends ListFragment implements OnClickListener
 {
     private Button btnSubmit;
 	
+	private ArrayList<Players> players;
 	private ArrayList<Players> data;
     private AppListAdapter adapter;
 
     private SharedPreferences sharedPref;
     private int maxNumberOfPlayers;
 
-    private Players[] player;
-
     private static final String NUMBER_OF_PLAYERS = "preference_dialog";
+	private static final String ARGUMENT_SAVE_INSTANCE_STATE = "players_default";
     private static final int MIN_SEEK_POSITION = 2;
-
-    private String[] name = new String[] {"Stas", "Oksana", "Igor", "Nadya"};
-    private String[] score = new String[] {"10", "35", "75", "95"};
+	private static final int MAX_SEEK_POSITION = 20;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -37,18 +35,17 @@ public class DefaultListFragment extends ListFragment implements OnClickListener
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         maxNumberOfPlayers = (sharedPref.getInt(NUMBER_OF_PLAYERS, 1)) + MIN_SEEK_POSITION;
-
-        player = new Players[maxNumberOfPlayers];
-        data = new ArrayList<>();
-
+		
+		data = new ArrayList<>();
+		
+		if (savedInstanceState == null || ! savedInstanceState.containsKey(ARGUMENT_SAVE_INSTANCE_STATE))
+			createPlayers();
+		else
+			restorePlayers(savedInstanceState);
+		
         for (int i = 0; i < maxNumberOfPlayers; i++)
         {
-            player[i] = new Players();
-
-            String name = "Player" + " " + String.valueOf(Players.getNextNumberOfPlayer());
-            int score = player[i].getScore();
-            player[i].setName(name);
-            data.add(player[i]);
+        	data.add(i, players.get(i));
         }
 		
         setHasOptionsMenu(true);
@@ -78,5 +75,33 @@ public class DefaultListFragment extends ListFragment implements OnClickListener
 	{
 		inflater.inflate(R.menu.menu_fragment_default, menu);
 		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		outState.putParcelableArrayList(ARGUMENT_SAVE_INSTANCE_STATE, players);
+	}
+	
+	public void createPlayers()
+	{
+		players = new ArrayList<>();
+		
+		for (int i = 0; i < MAX_SEEK_POSITION; i++)
+		{
+			Players temp = new Players();
+			//String name = "Player" + " " +String.valueOf(temp.getNumberOfPlayer());
+			//String name = "Player" + " " + String.valueOf(Players.getNextNumberOfPlayer());
+			String name = getResources().getString(R.string.default_name_player) + " " + (i + 1);
+			temp.setName(name);
+			players.add(temp);
+		}
+		players.trimToSize();
+	}
+	
+	public void restorePlayers(Bundle savedInstanceState)
+	{
+		players = savedInstanceState.getParcelableArrayList(ARGUMENT_SAVE_INSTANCE_STATE);
 	}
 }

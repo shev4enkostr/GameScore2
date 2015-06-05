@@ -57,7 +57,6 @@ public class AppFragmentPagerAdapter extends FragmentStatePagerAdapter
 	public int getItemPosition(Object object)
 	{
         //return super.getItemPosition(object);
-		
 		return POSITION_NONE;
 	}
 }
