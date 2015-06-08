@@ -32,6 +32,7 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	private int numberOfPlayer = 0; // current number of player
 	
 	private static final String NUMBER_OF_PLAYERS = "preference_dialog";
+	private static final String ARGUMENT_ADD_DIALOG = "add_dialog";
 	private static final String ARGUMENT_SAVE_PLAYERS = "players_main";
 	private static final String ARGUMENT_SAVE_NUMBER_OF_PLAYER = "number_of_player";
 	private static final String ARGUMENT_SAVE_PLAYER_NAME = "player_name";
@@ -114,15 +115,18 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		int id = item.getItemId();
-		
 		switch (id)
 		{
 			case R.id.action_add:
-				if (numberOfPlayer < maxNumberOfPlayers)
-					new AddPlayerDialogFragment().show(getFragmentManager(), "add_dialog");
+				// Code with checking max number of players from preference
+				/*if (numberOfPlayer < maxNumberOfPlayers)
+				 new AddPlayerDialogFragment().show(getFragmentManager(), ARGUMENT_ADD_DIALOG);
 				else
 					Toast.makeText(getActivity(), R.string.toast_max_number_of_players, Toast.LENGTH_SHORT).show();
-				break;
+				break;*/
+				
+				// Code without checking max number of players from preference
+				new AddPlayerDialogFragment().show(getFragmentManager(), ARGUMENT_ADD_DIALOG);
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -166,7 +170,6 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	@Override
 	public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked)
 	{
-		//getListView().getChildAt(position).setTag(checked);
 		data.get(position).setChecked(checked);
 		
 		int checkedCount = getListView().getCheckedItemCount();
@@ -283,17 +286,18 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	public void deletePlayers()
 	{
 		int count = 0;
-		
-		for (int i = 0; i < numberOfPlayer; i++)
+		// Deleting checked players
+		for (int i = numberOfPlayer - 1; i >= 0; i--)
 		{
 			if (data.get(i).isChecked())
 			{
 				data.remove(i);
 				players.remove(i);
-				numberOfPlayer--;
 				count++;
+				numberOfPlayer--;
 			}
 		}
+		// Create deleted Players.class objects
 		for (int i = 0; i < count; i++)
 		{
 			Players temp = new Players();
@@ -331,7 +335,8 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 			if (id == Dialog.BUTTON_POSITIVE)
 				addPlayer();
 		}
-
+		
+		// Call soft keyboard when dialog is showing
 		@Override
 		public void onFocusChange(View view, boolean hasFocus)
 		{
