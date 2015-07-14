@@ -4,7 +4,6 @@ import android.os.*;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.util.Log;
 import android.view.*;
 import android.view.View.*;
@@ -20,16 +19,17 @@ import android.app.*;
  */
 public class MainListFragment extends ListFragment implements View.OnClickListener, MultiChoiceModeListener
 {
-    private Button btnSubmit; // Button for add score
+    //private Button btnSubmit; // Button for add score
 	private EditText etAddPlayer; // EditText for DialogFragment new player add
 
 	private ArrayList<Players> players; // for order to not create new instances of the Players.class always when the Fragment is created
 	private ArrayList<Players> data; // for list adapter
-	private HashMap<Integer, ArrayList<Integer>> historyScore;
-	private ArrayList<Integer> tempHistoryScoreList;
-	private int undoRedoCount = 0;
-    private AppListAdapter adapter; // custom adapter
-	
+	private AppListAdapter adapter; // custom adapter
+
+	private HashMap<Integer, ArrayList<Integer>> historyScore; // for save history score
+	private ArrayList<Integer> tempHistoryScoreList; // for put/get score in/from history
+	private int undoRedoCount = 0; // count for undo/redo score from history
+
 	private SharedPreferences sharedPref;
 	private int maxNumberOfPlayers; // max number of players from preferences
 	private int numberOfPlayer = 0; // current number of player
@@ -43,8 +43,8 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	private static final String ARGUMENT_SAVE_UNDO_REDO_COUNT = "undo_redo_count";
 	private static final String ARGUMENT_SAVE_PLAYER_NAME = "player_name";
 	private static final String ARGUMENT_SAVE_PLAYER_SCORE = "player_score";
-	private static final int MIN_SEEK_POSITION = 2;
-	private static final int MAX_SEEK_POSITION = 20;
+	private static final int MIN_SEEK_POSITION = 2; // min number of players in preferences
+	private static final int MAX_SEEK_POSITION = 20; // max number of players in preferences
 
 	private static final String LOG = "gamescore2";
 
@@ -80,7 +80,7 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
     {
        	Log.d(LOG, "MainListFragment onCreateView()");
 		View view = inflater.inflate(R.layout.fragment, null);
-		btnSubmit = (Button) view.findViewById(R.id.btn_submit);
+		Button btnSubmit = (Button) view.findViewById(R.id.btn_submit);
 		btnSubmit.setOnClickListener(this);
 		return view;
     }
@@ -105,8 +105,11 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	@Override
 	public void onClick(View view)
 	{
-		if (view.getId() == R.id.btn_submit)
+		//if (view.getId() == R.id.btn_submit)
+		if (isScoreEntered())
 			addScore();
+		else
+			Toast.makeText(getActivity(), R.string.toast_no_score_entered, Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -283,6 +286,19 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 			clearHistory();
 		}
 	}
+
+	// Checking for entered score
+	public boolean isScoreEntered()
+	{
+		boolean scoreEntered = false;
+		for (int i = 0; i < numberOfPlayer && !scoreEntered; i++)
+		{
+			EditText et = (EditText) getListView().getChildAt(i).findViewById(R.id.et_enter_score_player);
+			if (et.getText().length() != 0)
+				scoreEntered = true;
+		}
+		return scoreEntered;
+	}
 	
 	public void addScore()
 	{
@@ -306,7 +322,10 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 		// Put history data to HashMap
 		historyScore.put(undoRedoCount, tempHistoryScoreList);
 		undoRedoCount++;
-		// Update menu
+		// Необходимо для того, чтобы невозможно было выполнить операцию redo после добавления очков
+		if (undoRedoCount < historyScore.size())
+			undoRedoCount = historyScore.size();
+		// Update ActionBar
 		getActivity().invalidateOptionsMenu();
 	}
 	

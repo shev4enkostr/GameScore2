@@ -13,6 +13,7 @@ public class Players implements Parcelable
 
     private static int nextNumberOfPlayer = 0;
 
+    static
     {
         nextNumberOfPlayer++;
     }

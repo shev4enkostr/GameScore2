@@ -21,9 +21,9 @@ public class AppDialogPreference extends DialogPreference implements OnSeekBarCh
 	private static final String ATTR_MIN_VALUE = "minValue";
 	private static final String ATTR_MAX_VALUE = "maxValue";
 	
-	private static final int DEFAULT_CURRENT_VALUE = 50;
-	private static final int DEFAULT_MIN_VALUE = 0;
-	private static final int DEFAULT_MAX_VALUE = 100;
+	private static final int DEFAULT_CURRENT_VALUE = 5;
+	private static final int DEFAULT_MIN_VALUE = 2;
+	private static final int DEFAULT_MAX_VALUE = 22;
 	
 	private TextView valueText;
 	private SeekBar seekBar;

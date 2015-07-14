@@ -1,6 +1,6 @@
 <?xml version = "1.0" encoding="utf-8" ?>
 <PreferenceScreen
-	xmlns:android ="http://schemas.android.com/apk/res/android" 
+	xmlns:android ="http://schemas.android.com/apk/res/android"
 	xmlns:example ="http://schemas.android.com/apk/res/su.shev4enkostr.gamescore2" >
 
 	<PreferenceCategory
@@ -15,12 +15,35 @@
 			android:positiveButtonText="OK"
 			android:negativeButtonText="@null"
 			android:persistent="true"
-			android:defaultValue="8"
+			android:defaultValue="6"
 			example:minValue="2"
 			example:maxValue="20"/>
-		
+
+		<EditTextPreference
+			android:key="@string/pref_ed_tx_pr_bar_min_key"
+			android:title="@string/pref_ed_tx_pr_bar_min_title"
+			android:summary="@string/pref_ed_tx_pr_bar_min_summary"
+			android:defaultValue="0"
+			android:inputType="numberSigned"/>
+
+		<EditTextPreference
+			android:key="@string/pref_ed_tx_pr_bar_max_key"
+			android:title="@string/pref_ed_tx_pr_bar_max_title"
+			android:summary="@string/pref_ed_tx_pr_bar_max_summary"
+			android:defaultValue="100"
+			android:inputType="numberSigned"/>
 	</PreferenceCategory>
-	
+
+	<PreferenceCategory
+		android:key="category_game_bridge"
+		android:title="@string/pref_category_game_bridge_title">
+
+		<CheckBoxPreference
+			android:key="preference_check_box_bridge"
+			android:title="@string/pref_ed_tx_pr_bar_min_title"
+			android:summary="@string/pref_ed_tx_pr_bar_min_summary"/>
+	</PreferenceCategory>
+
 	<PreferenceCategory
 		android:key="category_default"
 		android:title="@string/pref_category_about_title">

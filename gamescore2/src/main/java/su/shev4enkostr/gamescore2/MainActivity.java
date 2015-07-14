@@ -62,6 +62,7 @@ public class MainActivity extends FragmentActivity
         if (id == R.id.action_settings)
         {
             item.setIntent(new Intent(this, AppPreferenceActivity.class));
+            //getFragmentManager().beginTransaction().replace(android.R.id.content, new AppPreferenceActivity()).commit();
         }
 
         return super.onOptionsItemSelected(item);
