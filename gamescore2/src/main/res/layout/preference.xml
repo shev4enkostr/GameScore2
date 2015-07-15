@@ -39,9 +39,8 @@
 		android:title="@string/pref_category_game_bridge_title">
 
 		<CheckBoxPreference
-			android:key="preference_check_box_bridge"
-			android:title="@string/pref_ed_tx_pr_bar_min_title"
-			android:summary="@string/pref_ed_tx_pr_bar_min_summary"/>
+			android:key="@string/pref_ch_box_bridge_key"
+			android:title="@string/pref_ch_box_bridge_title"/>
 	</PreferenceCategory>
 
 	<PreferenceCategory

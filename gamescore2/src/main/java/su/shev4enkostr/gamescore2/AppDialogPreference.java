@@ -64,11 +64,13 @@ public class AppDialogPreference extends DialogPreference implements OnSeekBarCh
 	{
 		super.onDialogClosed(positiveResult);
 		
-		if (positiveResult)
-		{
+		if (!positiveResult)
+			return;
+		
+		if (shouldPersist())
 			persistInt(currentValue);
-			notifyChanged();
-		}
+		
+		notifyChanged();
 	}
 
 	@Override

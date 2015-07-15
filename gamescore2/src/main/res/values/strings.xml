@@ -66,7 +66,8 @@
 
         <string name="pref_ch_box_bridge_key">preference_check_box_bridge</string>
         <string name="pref_ch_box_bridge_title">Preference for game in Bridge</string>
-        <string name="pref_ch_box_bridge_summary">Dop score when you reach 195 points?</string>
+        <string name="pref_ch_box_bridge_summary_start">Drop score when you reach </string>
+		<string name="pref_ch_box_bridge_summary_end"> points?</string>
 
 	<string name="pref_category_about_title">Other</string>
 	
