@@ -52,14 +52,20 @@ public class AppListAdapter extends BaseAdapter implements OnTouchListener
         ((TextView) view.findViewById(R.id.tv_name_player)).setText(player.getName());
         ((TextView) view.findViewById(R.id.tv_score_player)).setText(String.valueOf(player.getScore()));
 		
-        int i = player.getScore();
+        int score = player.getScore();
         ProgressBar pb = (ProgressBar) view.findViewById(R.id.pr_bar_load);
-        pb.setProgress(i);
 
-        if (i < 40)
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        int minProgress = Integer.parseInt(sharedPref.getString(context.getString(R.string.pref_ed_tx_pr_bar_min_key), "0"));
+        int maxProgress = Integer.parseInt(sharedPref.getString(context.getString(R.string.pref_ed_tx_pr_bar_max_key), "100"));
+        pb.setMax(maxProgress - minProgress);
+
+        pb.setProgress(score - minProgress);
+
+        if (score < 40)
             pb.getProgressDrawable().setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_IN);
 
-        else if (i < 80)
+        else if (score < 80)
             pb.getProgressDrawable().setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_IN);
 
         else

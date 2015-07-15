@@ -6,11 +6,11 @@ import android.widget.*;
 import android.view.*;
 import android.widget.SeekBar.*;
 
-public class AppDialogPreference extends DialogPreference implements OnSeekBarChangeListener
+public class AppDialogPreferenceSeekBar extends DialogPreference implements OnSeekBarChangeListener
 {
 	private int defaultValue;
-	private int minValue;
-	private int maxValue;
+	private static int minValue;
+	private static int maxValue;
 	
 	private int currentValue;
 	
@@ -21,14 +21,14 @@ public class AppDialogPreference extends DialogPreference implements OnSeekBarCh
 	private static final String ATTR_MIN_VALUE = "minValue";
 	private static final String ATTR_MAX_VALUE = "maxValue";
 	
-	private static final int DEFAULT_CURRENT_VALUE = 5;
+	private static final int DEFAULT_CURRENT_VALUE = 6;
 	private static final int DEFAULT_MIN_VALUE = 2;
-	private static final int DEFAULT_MAX_VALUE = 22;
+	private static final int DEFAULT_MAX_VALUE = 20;
 	
 	private TextView valueText;
 	private SeekBar seekBar;
 	
-	public AppDialogPreference(Context context, AttributeSet attrs)
+	public AppDialogPreferenceSeekBar(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 		
@@ -40,7 +40,7 @@ public class AppDialogPreference extends DialogPreference implements OnSeekBarCh
 	@Override
 	protected View onCreateDialogView()
 	{
-		currentValue = getPersistedInt(defaultValue);
+		currentValue = (getPersistedInt(defaultValue) - minValue);
 		
 		View view = super.onCreateDialogView();
 		
@@ -62,26 +62,28 @@ public class AppDialogPreference extends DialogPreference implements OnSeekBarCh
 	@Override
 	protected void onDialogClosed(boolean positiveResult)
 	{
+		//Log.d("gamascore2", "if (shouldPersist())\n" + "\t\t\tpersistInt(currentValue + minValue);");
+
 		super.onDialogClosed(positiveResult);
 		
 		if (!positiveResult)
 			return;
-		
+
 		if (shouldPersist())
-			persistInt(currentValue);
-		
-		notifyChanged();
+			persistInt(currentValue + minValue);
+
+		//notifyChanged();
 	}
 
-	@Override
+	/*@Override
 	public CharSequence getSummary()
 	{
 		String summary = super.getSummary().toString();
 		int value = getPersistedInt(defaultValue);
-		
+
 		return String.format(summary, value);
-	}
-	
+	}*/
+
 	@Override
 	public void onProgressChanged(SeekBar seek, int value, boolean fromTouch)
 	{
@@ -99,5 +101,10 @@ public class AppDialogPreference extends DialogPreference implements OnSeekBarCh
 	public void onStopTrackingTouch(SeekBar p1)
 	{
 		// TODO: Implement this method
+	}
+
+	public int getCurrentValue()
+	{
+		return currentValue;
 	}
 }

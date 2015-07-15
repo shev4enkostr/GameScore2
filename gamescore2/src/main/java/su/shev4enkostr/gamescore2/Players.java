@@ -70,6 +70,11 @@ public class Players implements Parcelable
     {
         this.score += score;
     }
+
+    public void resetScore()
+    {
+        this.score = 0;
+    }
 	
 	public void setChecked(boolean checked)
 	{

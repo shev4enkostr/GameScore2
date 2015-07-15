@@ -7,15 +7,15 @@
 		android:key="category_default"
 		android:title="@string/pref_category_general_title">
 		
-		<su.shev4enkostr.gamescore2.AppDialogPreference
-			android:key="preference_dialog"
+		<su.shev4enkostr.gamescore2.AppDialogPreferenceSeekBar
+			android:key="@string/pref_dialog_seek_key"
 			android:title="@string/pref_dialog_seek_title"
 			android:summary="@string/pref_dialog_seek_summary"
 			android:dialogLayout="@layout/dialog_preference"
 			android:positiveButtonText="OK"
 			android:negativeButtonText="@null"
 			android:persistent="true"
-			android:defaultValue="6"
+			android:defaultValue="4"
 			example:minValue="2"
 			example:maxValue="20"/>
 

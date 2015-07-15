@@ -51,8 +51,9 @@
 		
 	<string name="pref_category_general_title">General</string>
 		
-		<string name="pref_dialog_seek_title">Max number of players</string>
-		<string name="pref_dialog_seek_summary">Max number of players in application</string>
+		<string name="pref_dialog_seek_key">preference_dialog_seek</string>
+        <string name="pref_dialog_seek_title">Max number of players</string>
+		<string name="pref_dialog_seek_summary">Max number of players in application:</string>
 
         <string name="pref_ed_tx_pr_bar_min_key">preference_progress_bar_min</string>
         <string name="pref_ed_tx_pr_bar_min_title">Min value on progress bar</string>

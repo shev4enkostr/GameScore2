@@ -23,10 +23,11 @@ public class DefaultListFragment extends ListFragment implements OnClickListener
     private SharedPreferences sharedPref;
     private int maxNumberOfPlayers;
 
-    private static final String NUMBER_OF_PLAYERS = "preference_dialog";
+	private static int minSeekPosition = 2;
+	private static int maxSeekPosition = 20;
+
+    //private static final String NUMBER_OF_PLAYERS = "preference_dialog";
 	private static final String ARGUMENT_SAVE_INSTANCE_STATE = "players_default";
-    private static final int MIN_SEEK_POSITION = 2;
-	private static final int MAX_SEEK_POSITION = 20;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -34,8 +35,8 @@ public class DefaultListFragment extends ListFragment implements OnClickListener
         super.onCreate(savedInstanceState);
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        maxNumberOfPlayers = (sharedPref.getInt(NUMBER_OF_PLAYERS, 1)) + MIN_SEEK_POSITION;
-		
+		maxNumberOfPlayers = sharedPref.getInt(getString(R.string.pref_dialog_seek_key), 6);
+
 		data = new ArrayList<>();
 		
 		if (savedInstanceState == null || ! savedInstanceState.containsKey(ARGUMENT_SAVE_INSTANCE_STATE))
@@ -88,7 +89,7 @@ public class DefaultListFragment extends ListFragment implements OnClickListener
 	{
 		players = new ArrayList<>();
 		
-		for (int i = 0; i < MAX_SEEK_POSITION; i++)
+		for (int i = 0; i < maxSeekPosition; i++)
 		{
 			Players temp = new Players();
 			//String name = "Player" + " " +String.valueOf(temp.getNumberOfPlayer());

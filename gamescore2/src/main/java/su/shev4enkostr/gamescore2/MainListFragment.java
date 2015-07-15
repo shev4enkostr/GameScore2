@@ -33,8 +33,14 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	private SharedPreferences sharedPref;
 	private int maxNumberOfPlayers; // max number of players from preferences
 	private int numberOfPlayer = 0; // current number of player
+
+	private boolean isBridge;
+	private int resetScoreBridgeGame;
+
+	private static int minSeekPosition = 2; // min number of players in preferences
+	private static int maxSeekPosition = 20; // max number of players in preferences
 	
-	private static final String NUMBER_OF_PLAYERS = "preference_dialog";
+	//private static final String NUMBER_OF_PLAYERS = "preference_dialog";
 	private static final String ARGUMENT_ADD_DIALOG = "add_dialog";
 	private static final String ARGUMENT_SAVE_PLAYERS = "players_main";
 	private static final String ARGUMENT_SAVE_NUMBER_OF_PLAYER = "number_of_player";
@@ -43,8 +49,6 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	private static final String ARGUMENT_SAVE_UNDO_REDO_COUNT = "undo_redo_count";
 	private static final String ARGUMENT_SAVE_PLAYER_NAME = "player_name";
 	private static final String ARGUMENT_SAVE_PLAYER_SCORE = "player_score";
-	private static final int MIN_SEEK_POSITION = 2; // min number of players in preferences
-	private static final int MAX_SEEK_POSITION = 20; // max number of players in preferences
 
 	private static final String LOG = "gamescore2";
 
@@ -53,10 +57,13 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
     {
 		Log.d(LOG, "MainListFragment onCreate()");
 		super.onCreate(savedInstanceState);
-		
+
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		maxNumberOfPlayers = (sharedPref.getInt(NUMBER_OF_PLAYERS, 1)) + MIN_SEEK_POSITION;
-		
+		maxNumberOfPlayers = sharedPref.getInt(getString(R.string.pref_dialog_seek_key), 1);
+
+		isBridge = sharedPref.getBoolean(getString(R.string.pref_ch_box_bridge_key), false);
+		resetScoreBridgeGame = (Integer.parseInt(sharedPref.getString(getString(R.string.pref_ed_tx_pr_bar_max_key), "100")) - 5);
+
 		setHasOptionsMenu(true);
 
 		data = new ArrayList<>();
@@ -233,7 +240,7 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	{
 		players = new ArrayList<>();
 
-		for (int i = 0; i < MAX_SEEK_POSITION; i++)
+		for (int i = 0; i < maxSeekPosition; i++)
 		{
 			Players temp = new Players();
 			String name = "Player" + " " + String.valueOf(Players.getNextNumberOfPlayer());
@@ -314,7 +321,11 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 			
 			if (etScore.getText().length() != 0)
 				data.get(i).addScore(Integer.parseInt(etScore.getText().toString()));
-				
+
+			// reset score if play in Bridge Game
+			if (isBridge)
+				resetScoreInBridgeGame(data.get(i));
+
 			etScore.setText("");
 		}
 		// Update list
@@ -337,6 +348,12 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 			data.get(i).setScore(0);
 		}
 		adapter.notifyDataSetChanged();
+	}
+
+	private void resetScoreInBridgeGame(Players player)
+	{
+		if (resetScoreBridgeGame == player.getScore())
+			player.resetScore();
 	}
 
 	public void undoScore()
