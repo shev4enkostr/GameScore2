@@ -13,6 +13,11 @@ public class AddPlayerDialogFragment2 extends DialogFragment implements OnClickL
 {
 	private EditText etAddPlayer;
 	private Dialog dialog;
+
+	public interface OnPositiveButtonClick
+	{public void positiveButtonClick();}
+
+	private OnPositiveButtonClick positiveButtonClick;
 	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState)
@@ -30,11 +35,21 @@ public class AddPlayerDialogFragment2 extends DialogFragment implements OnClickL
 	}
 
 	@Override
+	public void onAttach(Activity activity)
+	{
+		super.onAttach(activity);
+
+		positiveButtonClick = (OnPositiveButtonClick) activity;
+	}
+
+	@Override
 	public void onClick(DialogInterface dialogInterface, int id)
 	{
 		String name = etAddPlayer.getText().toString();
 		if (id == Dialog.BUTTON_POSITIVE)
-			Toast.makeText(getActivity(), "Positive " + name, Toast.LENGTH_SHORT).show();
+			//Toast.makeText(getActivity(), "Positive " + name, Toast.LENGTH_SHORT).show();
+			//MainListFragment().addPlayer();
+			positiveButtonClick.positiveButtonClick();
 	}
 	
 	@Override

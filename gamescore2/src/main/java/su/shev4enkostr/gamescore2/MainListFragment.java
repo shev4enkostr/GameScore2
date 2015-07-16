@@ -1,7 +1,7 @@
 package su.shev4enkostr.gamescore2;
 
 import android.os.*;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
 import android.util.Log;
@@ -17,9 +17,9 @@ import android.app.*;
 /**
  * Created by stas on 20.05.15.
  */
-public class MainListFragment extends ListFragment implements View.OnClickListener, MultiChoiceModeListener
+public class MainListFragment extends Fragment implements View.OnClickListener, MultiChoiceModeListener
 {
-    //private Button btnSubmit; // Button for add score
+    private AbsListView listView;
 	private EditText etAddPlayer; // EditText for DialogFragment new player add
 
 	private ArrayList<Players> players; // for order to not create new instances of the Players.class always when the Fragment is created
@@ -37,7 +37,7 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	private boolean isBridge;
 	private int resetScoreBridgeGame;
 
-	private static int minSeekPosition = 2; // min number of players in preferences
+	//private static int minSeekPosition = 2; // min number of players in preferences
 	private static int maxSeekPosition = 20; // max number of players in preferences
 	
 	//private static final String NUMBER_OF_PLAYERS = "preference_dialog";
@@ -49,18 +49,24 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	private static final String ARGUMENT_SAVE_UNDO_REDO_COUNT = "undo_redo_count";
 	private static final String ARGUMENT_SAVE_PLAYER_NAME = "player_name";
 	private static final String ARGUMENT_SAVE_PLAYER_SCORE = "player_score";
+	private static final String ARGUMENT_PREFERENCE = "main_preference";
 
 	private static final String LOG = "gamescore2";
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-		Log.d(LOG, "MainListFragment onCreate()");
+		//Log.d(LOG, "MainListFragment onCreate()");
 		super.onCreate(savedInstanceState);
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		maxNumberOfPlayers = sharedPref.getInt(getString(R.string.pref_dialog_seek_key), 1);
 
+		// use with code from OnOptionsItemSelected() (with checking max number of players from preference)
+		//maxNumberOfPlayers = sharedPref.getInt(getString(R.string.pref_dialog_seek_key), 1);
+
+		//maxSeekPosition = AppDialogPreferenceSeekBar.getMaxValue();
+
+		// for playing in Bridge Game
 		isBridge = sharedPref.getBoolean(getString(R.string.pref_ch_box_bridge_key), false);
 		resetScoreBridgeGame = (Integer.parseInt(sharedPref.getString(getString(R.string.pref_ed_tx_pr_bar_max_key), "100")) - 5);
 
@@ -73,33 +79,35 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 			createPlayers();
 			loadScore();
 			historyScore = new HashMap<>();
-			//getActivity().invalidateOptionsMenu();
 		}
 		else
 			restorePlayers(savedInstanceState);
 		
 		adapter = new AppListAdapter(getActivity(), data);
-        setListAdapter(adapter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-       	Log.d(LOG, "MainListFragment onCreateView()");
+       	//Log.d(LOG, "MainListFragment onCreateView()");
 		View view = inflater.inflate(R.layout.fragment, null);
 		Button btnSubmit = (Button) view.findViewById(R.id.btn_submit);
 		btnSubmit.setOnClickListener(this);
+
+		listView = (AbsListView) view.findViewById(R.id.my_list);
+		listView.setAdapter(adapter);
+
 		return view;
     }
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
-		Log.d(LOG, "MainListFragment onActivityCreated()");
+		//Log.d(LOG, "MainListFragment onActivityCreated()");
 		super.onActivityCreated(savedInstanceState);
-		
-		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		getListView().setMultiChoiceModeListener(this);
+
+		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		listView.setMultiChoiceModeListener(this);
 	}
 
 	@Override
@@ -220,7 +228,7 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	{
 		data.get(position).setChecked(checked);
 		
-		int checkedCount = getListView().getCheckedItemCount();
+		int checkedCount = listView.getCheckedItemCount();
 		switch (checkedCount)
 		{
 			case 0:
@@ -294,19 +302,6 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 		}
 	}
 
-	// Checking for entered score
-	public boolean isScoreEntered()
-	{
-		boolean scoreEntered = false;
-		for (int i = 0; i < numberOfPlayer && !scoreEntered; i++)
-		{
-			EditText et = (EditText) getListView().getChildAt(i).findViewById(R.id.et_enter_score_player);
-			if (et.getText().length() != 0)
-				scoreEntered = true;
-		}
-		return scoreEntered;
-	}
-	
 	public void addScore()
 	{
 		tempHistoryScoreList = new ArrayList<>();
@@ -316,7 +311,7 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 			tempHistoryScoreList.add(data.get(i).getScore());
 			
 			// Add score
-			View view = getListView().getChildAt(i);
+			View view = listView.getChildAt(i);
 			EditText etScore = (EditText) view.findViewById(R.id.et_enter_score_player);
 			
 			if (etScore.getText().length() != 0)
@@ -338,6 +333,19 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 			undoRedoCount = historyScore.size();
 		// Update ActionBar
 		getActivity().invalidateOptionsMenu();
+	}
+
+	// Checking for entered score
+	public boolean isScoreEntered()
+	{
+		boolean scoreEntered = false;
+		for (int i = 0; i < numberOfPlayer && !scoreEntered; i++)
+		{
+			EditText et = (EditText) listView.getChildAt(i).findViewById(R.id.et_enter_score_player);
+			if (et.getText().length() != 0)
+				scoreEntered = true;
+		}
+		return scoreEntered;
 	}
 	
 	public void clearScore()
@@ -406,7 +414,7 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	// Before killing app
 	public void saveScore()
 	{
-		sharedPref = getActivity().getSharedPreferences("main_preference", getActivity().MODE_PRIVATE);
+		sharedPref = getActivity().getSharedPreferences(ARGUMENT_PREFERENCE, getActivity().MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
 		
 		editor.putInt(ARGUMENT_SAVE_NUMBER_OF_PLAYER, numberOfPlayer);
@@ -426,7 +434,7 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 		String name;
 		int score;
 		
-		sharedPref = getActivity().getSharedPreferences("main_preference", getActivity().MODE_PRIVATE);
+		sharedPref = getActivity().getSharedPreferences(ARGUMENT_PREFERENCE, getActivity().MODE_PRIVATE);
 		
 		numberOfPlayer = sharedPref.getInt(ARGUMENT_SAVE_NUMBER_OF_PLAYER, 0);
 		for (int i = 0; i < numberOfPlayer; i++)
@@ -466,7 +474,7 @@ public class MainListFragment extends ListFragment implements View.OnClickListen
 	}
 	
 	//Dialog add player class
-	class AddPlayerDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, OnFocusChangeListener
+	public class AddPlayerDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, OnFocusChangeListener
 	{
 		private Dialog dialog;
 

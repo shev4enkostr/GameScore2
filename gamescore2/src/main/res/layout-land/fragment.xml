@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <GridView
+        android:id="@+id/my_list"
+        android:horizontalSpacing="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:numColumns="auto_fit"
+        android:descendantFocusability="beforeDescendants"/>
+        <!--android:divider="@android:color/holo_blue_bright"
+        android:dividerHeight="2px"
+        android:background="@android:color/holo_blue_bright"
+        android:verticalSpacing="1dp"
+        android:horizontalSpacing="1dp"-->
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_marginBottom="0dp"
+        android:background="?android:attr/dividerVertical" />
+
+    <LinearLayout
+        style="@android:style/DeviceDefault.ButtonBar.AlertDialog"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <!--android:layout_alignParentRight="true"-->
+
+        <Button
+            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:text="@string/btn_submit"
+            android:id="@+id/btn_submit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="bottom"/>
+
+    </LinearLayout>
+</LinearLayout>

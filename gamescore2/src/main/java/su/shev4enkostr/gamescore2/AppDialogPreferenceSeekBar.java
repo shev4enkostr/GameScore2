@@ -71,18 +71,7 @@ public class AppDialogPreferenceSeekBar extends DialogPreference implements OnSe
 
 		if (shouldPersist())
 			persistInt(currentValue + minValue);
-
-		//notifyChanged();
 	}
-
-	/*@Override
-	public CharSequence getSummary()
-	{
-		String summary = super.getSummary().toString();
-		int value = getPersistedInt(defaultValue);
-
-		return String.format(summary, value);
-	}*/
 
 	@Override
 	public void onProgressChanged(SeekBar seek, int value, boolean fromTouch)
@@ -103,8 +92,8 @@ public class AppDialogPreferenceSeekBar extends DialogPreference implements OnSe
 		// TODO: Implement this method
 	}
 
-	public int getCurrentValue()
+	public static int getMaxValue()
 	{
-		return currentValue;
+		return maxValue;
 	}
 }

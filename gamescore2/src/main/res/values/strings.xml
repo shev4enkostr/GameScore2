@@ -1,5 +1,7 @@
 <resources>
 
+    <!-- Global strings -->
+
     <string name="app_name">Game Score 2</string>
 
     <string name="page_title_main">MAIN SCREEN</string>
