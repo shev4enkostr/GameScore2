@@ -1,1 +1,1 @@
-include ':app', ':gamescore', ':gamescore2'
+include ':app', ':gamescore', ':gamescore2', ':easycode'

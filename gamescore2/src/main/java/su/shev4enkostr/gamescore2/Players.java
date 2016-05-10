@@ -1,6 +1,8 @@
 package su.shev4enkostr.gamescore2;
 import android.os.*;
 
+import java.util.ArrayList;
+
 /**
  * Created by stas on 07.04.15.
  */

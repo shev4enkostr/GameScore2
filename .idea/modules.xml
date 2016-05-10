@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GameScore.iml" filepath="$PROJECT_DIR$/GameScore.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/easycode/easycode.iml" filepath="$PROJECT_DIR$/easycode/easycode.iml" />
       <module fileurl="file://$PROJECT_DIR$/gamescore/gamescore.iml" filepath="$PROJECT_DIR$/gamescore/gamescore.iml" />
       <module fileurl="file://$PROJECT_DIR$/gamescore2/gamescore2.iml" filepath="$PROJECT_DIR$/gamescore2/gamescore2.iml" />
     </modules>

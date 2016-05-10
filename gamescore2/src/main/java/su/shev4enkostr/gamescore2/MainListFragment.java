@@ -4,6 +4,8 @@ import android.os.*;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.*;
 import android.view.View.*;
@@ -24,6 +26,7 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 
 	private ArrayList<Players> players; // for order to not create new instances of the Players.class always when the Fragment is created
 	private ArrayList<Players> data; // for list adapter
+	protected static ArrayList<Integer> enteredScore; // для хранения введенных очков
 	private AppListAdapter adapter; // custom adapter
 
 	private HashMap<Integer, ArrayList<Integer>> historyScore; // for save history score
@@ -71,6 +74,10 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		resetScoreBridgeGame = (Integer.parseInt(sharedPref.getString(getString(R.string.pref_ed_tx_pr_bar_max_key), "100")) - 5);
 
 		setHasOptionsMenu(true);
+
+		enteredScore = new ArrayList<>(20);
+		for (int i = 0; i < 20; i++)
+			enteredScore.add(0);
 
 		data = new ArrayList<>();
 		
@@ -242,7 +249,7 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 				break;
 		}
 	}
-	
+
 	// Create new Players.class objects
 	public void createPlayers()
 	{
@@ -311,17 +318,22 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 			tempHistoryScoreList.add(data.get(i).getScore());
 			
 			// Add score
-			View view = listView.getChildAt(i);
+			/*View view = listView.getChildAt(i);
 			EditText etScore = (EditText) view.findViewById(R.id.et_enter_score_player);
-			
+
 			if (etScore.getText().length() != 0)
-				data.get(i).addScore(Integer.parseInt(etScore.getText().toString()));
+				data.get(i).addScore(Integer.parseInt(etScore.getText().toString()));*/
 
 			// reset score if play in Bridge Game
 			if (isBridge)
 				resetScoreInBridgeGame(data.get(i));
 
-			etScore.setText("");
+			//etScore.setText("");
+
+			if (enteredScore.get(i) != null && enteredScore.get(i) != 0)
+				data.get(i).addScore(enteredScore.get(i));
+
+			resetEnteredScore();
 		}
 		// Update list
 		adapter.notifyDataSetChanged();
@@ -342,6 +354,7 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		for (int i = 0; i < numberOfPlayer && !scoreEntered; i++)
 		{
 			EditText et = (EditText) listView.getChildAt(i).findViewById(R.id.et_enter_score_player);
+			//EditText et = (EditText) getViewByPosition(i, listView).findViewById(R.id.et_enter_score_player);
 			if (et.getText().length() != 0)
 				scoreEntered = true;
 		}
@@ -356,6 +369,12 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 			data.get(i).setScore(0);
 		}
 		adapter.notifyDataSetChanged();
+	}
+
+	private void resetEnteredScore() {
+		for (int i = 0; i <= listView.getLastVisiblePosition() - listView.getFirstVisiblePosition(); i++) {
+			((EditText) listView.getChildAt(i).findViewById(R.id.et_enter_score_player)).setText("");
+		}
 	}
 
 	private void resetScoreInBridgeGame(Players player)

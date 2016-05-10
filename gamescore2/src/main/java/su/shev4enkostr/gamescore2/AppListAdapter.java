@@ -2,6 +2,8 @@ package su.shev4enkostr.gamescore2;
 
 import android.content.*;
 import android.graphics.*;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
@@ -31,9 +33,9 @@ public class AppListAdapter extends BaseAdapter implements OnTouchListener
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup viewGroup)
+    public View getView(final int position, View convertView, ViewGroup viewGroup)
     {
-        ViewHolder holder;
+        final ViewHolder holder;
 		View view = convertView;
 		
         if (view == null)
@@ -73,7 +75,20 @@ public class AppListAdapter extends BaseAdapter implements OnTouchListener
 		
 		//ViewHolder holder = new ViewHolder();
 		//holder.etHolder = et;
-			
+
+        holder.etHolder.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String score = holder.etHolder.getText().toString();
+                if (score.length() != 0)
+                    MainListFragment.enteredScore.set(position, Integer.parseInt(score));
+            }
+        });
+
 		holder.etHolder.setOnTouchListener(this);
 		view.setOnTouchListener(this);
 		view.setTag(holder);
@@ -93,11 +108,6 @@ public class AppListAdapter extends BaseAdapter implements OnTouchListener
         return position;
     }
 	
-	private static class ViewHolder
-	{
-		private EditText etHolder;
-	}
-	
 	@Override
 	public boolean onTouch(View view, MotionEvent motionEvent)
 	{
@@ -115,4 +125,9 @@ public class AppListAdapter extends BaseAdapter implements OnTouchListener
 		}
 		return false;
 	}
+
+    private static class ViewHolder
+    {
+        private EditText etHolder;
+    }
 }
