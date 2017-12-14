@@ -1,6 +1,8 @@
 package su.shev4enkostr.gamescore2;
 
 import android.os.*;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
@@ -19,10 +21,9 @@ import android.app.*;
 /**
  * Created by stas on 20.05.15.
  */
-public class MainListFragment extends Fragment implements View.OnClickListener, MultiChoiceModeListener
-{
-    private AbsListView listView;
-	private EditText etAddPlayer; // EditText for DialogFragment new player add
+public class MainListFragment extends Fragment implements View.OnClickListener, MultiChoiceModeListener {
+	private AbsListView listView;
+	private static EditText etAddPlayer; // EditText for DialogFragment new player add
 
 	private ArrayList<Players> players; // for order to not create new instances of the Players.class always when the Fragment is created
 	private ArrayList<Players> data; // for list adapter
@@ -42,7 +43,7 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 
 	//private static int minSeekPosition = 2; // min number of players in preferences
 	private static int maxSeekPosition = 20; // max number of players in preferences
-	
+
 	//private static final String NUMBER_OF_PLAYERS = "preference_dialog";
 	private static final String ARGUMENT_ADD_DIALOG = "add_dialog";
 	private static final String ARGUMENT_SAVE_PLAYERS = "players_main";
@@ -56,13 +57,12 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 
 	private static final String LOG = "gamescore2";
 
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
 		//Log.d(LOG, "MainListFragment onCreate()");
 		super.onCreate(savedInstanceState);
 
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 		// use with code from OnOptionsItemSelected() (with checking max number of players from preference)
 		//maxNumberOfPlayers = sharedPref.getInt(getString(R.string.pref_dialog_seek_key), 1);
@@ -80,23 +80,20 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 			enteredScore.add(0);
 
 		data = new ArrayList<>();
-		
-		if (savedInstanceState == null || ! savedInstanceState.containsKey(ARGUMENT_SAVE_PLAYERS))
-		{
+
+		if (savedInstanceState == null || !savedInstanceState.containsKey(ARGUMENT_SAVE_PLAYERS)) {
 			createPlayers();
 			loadScore();
 			historyScore = new HashMap<>();
-		}
-		else
+		} else
 			restorePlayers(savedInstanceState);
-		
-		adapter = new AppListAdapter(getActivity(), data);
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-       	//Log.d(LOG, "MainListFragment onCreateView()");
+		adapter = new AppListAdapter(getActivity(), data);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//Log.d(LOG, "MainListFragment onCreateView()");
 		View view = inflater.inflate(R.layout.fragment, null);
 		Button btnSubmit = (Button) view.findViewById(R.id.btn_submit);
 		btnSubmit.setOnClickListener(this);
@@ -105,11 +102,10 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		listView.setAdapter(adapter);
 
 		return view;
-    }
-	
+	}
+
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState)
-	{
+	public void onActivityCreated(Bundle savedInstanceState) {
 		//Log.d(LOG, "MainListFragment onActivityCreated()");
 		super.onActivityCreated(savedInstanceState);
 
@@ -118,15 +114,13 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 	}
 
 	@Override
-	public void onDestroy()
-	{
+	public void onDestroy() {
 		saveScore();
 		super.onDestroy();
 	}
 
 	@Override
-	public void onClick(View view)
-	{
+	public void onClick(View view) {
 		//if (view.getId() == R.id.btn_submit)
 		if (isScoreEntered())
 			addScore();
@@ -135,34 +129,30 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-	{
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_fragment_main, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override
-	public void onPrepareOptionsMenu(Menu menu)
-	{
+	public void onPrepareOptionsMenu(Menu menu) {
 		if (undoRedoCount <= 0)
 			menu.findItem(R.id.action_undo).setEnabled(false);
 		else
 			menu.findItem(R.id.action_undo).setEnabled(true);
-			
+
 		if (undoRedoCount >= (historyScore.size() - 1))
 			menu.findItem(R.id.action_redo).setEnabled(false);
 		else
 			menu.findItem(R.id.action_redo).setEnabled(true);
-			
+
 		super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
+	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		switch (id)
-		{
+		switch (id) {
 			case R.id.action_add:
 				// Code with checking max number of players from preference
 				/*if (numberOfPlayer < maxNumberOfPlayers)
@@ -170,9 +160,24 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 				else
 					Toast.makeText(getActivity(), R.string.toast_max_number_of_players, Toast.LENGTH_SHORT).show();
 				break;*/
-				
+
 				// Code without checking max number of players from preference
-				new AddPlayerDialogFragment().show(getFragmentManager(), ARGUMENT_ADD_DIALOG);
+				//new AddPlayerDialogFragment().show(getFragmentManager(), ARGUMENT_ADD_DIALOG);
+				AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_DeviceDefault_Dialog_Alert)
+						.setTitle(R.string.add_title)
+						.setPositiveButton(R.string.add_btn_ok, ((dialogInterface, i) ->
+								addPlayer()))
+						.setNegativeButton(R.string.add_btn_cancel, ((dialogInterface, i) ->
+								dialogInterface.cancel()))
+						.setView(getActivity().getLayoutInflater().inflate(R.layout.add_player_dialog, null));
+				AlertDialog dialog = builder.create();
+				dialog.show();
+				etAddPlayer = dialog.findViewById(R.id.et_add);
+				etAddPlayer.setOnFocusChangeListener((view, hasFocus) -> {
+						if (hasFocus)
+							dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+						}
+				);
 				break;
 			case R.id.action_undo:
 				undoScore();
@@ -188,56 +193,49 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState)
-	{
+	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putParcelableArrayList(ARGUMENT_SAVE_PLAYERS, players);
 		outState.putInt(ARGUMENT_SAVE_NUMBER_OF_PLAYER, numberOfPlayer);
 		// Save history
 		outState.putInt(ARGUMENT_SAVE_UNDO_REDO_COUNT, undoRedoCount);
 		outState.putInt(ARGUMENT_SAVE_HISTORY_SCORE_SIZE, historyScore.size());
-		for (int i = 0; i < historyScore.size(); i++)
-		{
+		for (int i = 0; i < historyScore.size(); i++) {
 			outState.putIntegerArrayList((ARGUMENT_SAVE_HISTORY_SCORE + i), historyScore.get(i));
 		}
 	}
-	
+
 	@Override
-	public boolean onCreateActionMode(ActionMode mode, Menu menu)
-	{
+	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 		mode.getMenuInflater().inflate(R.menu.context_menu_fragment, menu);
 		mode.setTitle(R.string.action_mode_title);
 		return true;
 	}
 
 	@Override
-	public boolean onPrepareActionMode(ActionMode p1, Menu p2)
-	{
+	public boolean onPrepareActionMode(ActionMode p1, Menu p2) {
 		return false;
 	}
 
 	@Override
-	public boolean onActionItemClicked(ActionMode mode, MenuItem item)
-	{
+	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		if (item.getItemId() == R.id.action_delete)
 			deletePlayers();
-		
+
 		mode.finish();
 		return true;
 	}
 
 	@Override
-	public void onDestroyActionMode(ActionMode p1)
-	{}
+	public void onDestroyActionMode(ActionMode p1) {
+	}
 
 	@Override
-	public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked)
-	{
+	public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 		data.get(position).setChecked(checked);
-		
+
 		int checkedCount = listView.getCheckedItemCount();
-		switch (checkedCount)
-		{
+		switch (checkedCount) {
 			case 0:
 				mode.setSubtitle(null);
 				break;
@@ -251,12 +249,10 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 	}
 
 	// Create new Players.class objects
-	public void createPlayers()
-	{
+	public void createPlayers() {
 		players = new ArrayList<>();
 
-		for (int i = 0; i < maxSeekPosition; i++)
-		{
+		for (int i = 0; i < maxSeekPosition; i++) {
 			Players temp = new Players();
 			String name = "Player" + " " + String.valueOf(Players.getNextNumberOfPlayer());
 			//String name = getResources().getString(R.string.default_name_player) + " " + (i + 1);
@@ -267,8 +263,7 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 	}
 
 	// Restore players from savedInstanceState
-	public void restorePlayers(Bundle savedInstanceState)
-	{
+	public void restorePlayers(Bundle savedInstanceState) {
 		players = savedInstanceState.getParcelableArrayList(ARGUMENT_SAVE_PLAYERS);
 		numberOfPlayer = savedInstanceState.getInt(ARGUMENT_SAVE_NUMBER_OF_PLAYER);
 		// Restore players in list
@@ -278,27 +273,23 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		undoRedoCount = savedInstanceState.getInt(ARGUMENT_SAVE_UNDO_REDO_COUNT, 0);
 		historyScore = new HashMap<>();
 		int historyScoreSize = savedInstanceState.getInt(ARGUMENT_SAVE_HISTORY_SCORE_SIZE, 0);
-		for (int i = 0; i < historyScoreSize; i++)
-		{
+		for (int i = 0; i < historyScoreSize; i++) {
 			historyScore.put(i, savedInstanceState.getIntegerArrayList(ARGUMENT_SAVE_HISTORY_SCORE + i));
 		}
 		getActivity().invalidateOptionsMenu();
 	}
-	
+
 	// Restore players from SharedPreference (after then app was killed)
-	public void restorePlayers(String name, int score, int position)
-	{
+	public void restorePlayers(String name, int score, int position) {
 		players.get(position).setName(name);
 		players.get(position).setScore(score);
 		data.add(position, players.get(position));
 	}
-	
-	public void addPlayer()
-	{
+
+	public void addPlayer() {
 		if (etAddPlayer.getText().length() == 0)
 			Toast.makeText(getActivity(), R.string.toast_no_name, Toast.LENGTH_SHORT).show();
-		else
-		{
+		else {
 			// Add new player
 			String name = etAddPlayer.getText().toString();
 			players.get(numberOfPlayer).setName(name);
@@ -309,14 +300,12 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		}
 	}
 
-	public void addScore()
-	{
+	public void addScore() {
 		tempHistoryScoreList = new ArrayList<>();
-		for (int i = 0; i < numberOfPlayer; i++)
-		{
+		for (int i = 0; i < numberOfPlayer; i++) {
 			// Save score in history
 			tempHistoryScoreList.add(data.get(i).getScore());
-			
+
 			// Add score
 			/*View view = listView.getChildAt(i);
 			EditText etScore = (EditText) view.findViewById(R.id.et_enter_score_player);
@@ -348,11 +337,9 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 	}
 
 	// Checking for entered score
-	public boolean isScoreEntered()
-	{
+	public boolean isScoreEntered() {
 		boolean scoreEntered = false;
-		for (int i = 0; i < numberOfPlayer && !scoreEntered; i++)
-		{
+		for (int i = 0; i < numberOfPlayer && !scoreEntered; i++) {
 			EditText et = (EditText) listView.getChildAt(i).findViewById(R.id.et_enter_score_player);
 			//EditText et = (EditText) getViewByPosition(i, listView).findViewById(R.id.et_enter_score_player);
 			if (et.getText().length() != 0)
@@ -360,12 +347,10 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		}
 		return scoreEntered;
 	}
-	
-	public void clearScore()
-	{
+
+	public void clearScore() {
 		saveScoreInHistory();
-		for (int i = 0; i < adapter.getCount(); i++)
-		{
+		for (int i = 0; i < adapter.getCount(); i++) {
 			data.get(i).setScore(0);
 		}
 		adapter.notifyDataSetChanged();
@@ -377,14 +362,12 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		}
 	}
 
-	private void resetScoreInBridgeGame(Players player)
-	{
+	private void resetScoreInBridgeGame(Players player) {
 		if (resetScoreBridgeGame == player.getScore())
 			player.resetScore();
 	}
 
-	public void undoScore()
-	{
+	public void undoScore() {
 		// Save last score
 		saveScoreInHistory();
 		undoRedoCount--;
@@ -393,85 +376,72 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		getScoreFromHistory();
 	}
 
-	public void redoScore()
-	{
+	public void redoScore() {
 		undoRedoCount++;
 		getScoreFromHistory();
 	}
-	
-	public void saveScoreInHistory()
-	{
+
+	public void saveScoreInHistory() {
 		tempHistoryScoreList = new ArrayList<>();
-		for (int i = 0; i < data.size(); i++)
-		{
+		for (int i = 0; i < data.size(); i++) {
 			tempHistoryScoreList.add(data.get(i).getScore());
 		}
 		historyScore.put(undoRedoCount, tempHistoryScoreList);
 		undoRedoCount++;
 		getActivity().invalidateOptionsMenu();
 	}
-	
-	public void getScoreFromHistory()
-	{	
+
+	public void getScoreFromHistory() {
 		tempHistoryScoreList = new ArrayList<>();
 		tempHistoryScoreList = historyScore.get(undoRedoCount);
-		for (int i = 0; i < data.size(); i++)
-		{
+		for (int i = 0; i < data.size(); i++) {
 			data.get(i).setScore(tempHistoryScoreList.get(i));
 		}
 		adapter.notifyDataSetChanged();
 		getActivity().invalidateOptionsMenu();
 	}
-	
-	public void clearHistory()
-	{
+
+	public void clearHistory() {
 		historyScore = new HashMap<>();
 		undoRedoCount = 0;
 		getActivity().invalidateOptionsMenu();
 	}
-	
+
 	// Before killing app
-	public void saveScore()
-	{
-		sharedPref = getActivity().getSharedPreferences(ARGUMENT_PREFERENCE, getActivity().MODE_PRIVATE);
+	public void saveScore() {
+		sharedPref = getActivity().getSharedPreferences(ARGUMENT_PREFERENCE, MainActivity.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPref.edit();
-		
+
 		editor.putInt(ARGUMENT_SAVE_NUMBER_OF_PLAYER, numberOfPlayer);
 		editor.apply();
-		for (int i = 0; i < numberOfPlayer; i++)
-		{
+		for (int i = 0; i < numberOfPlayer; i++) {
 			editor.putString(ARGUMENT_SAVE_PLAYER_NAME + i, data.get(i).getName());
 			editor.apply();
 			editor.putInt(ARGUMENT_SAVE_PLAYER_SCORE + i, data.get(i).getScore());
 			editor.apply();
 		}
 	}
-	
+
 	// After then app was killed
-	public void loadScore()
-	{
+	public void loadScore() {
 		String name;
 		int score;
-		
-		sharedPref = getActivity().getSharedPreferences(ARGUMENT_PREFERENCE, getActivity().MODE_PRIVATE);
-		
+
+		sharedPref = getActivity().getSharedPreferences(ARGUMENT_PREFERENCE, MainActivity.MODE_PRIVATE);
+
 		numberOfPlayer = sharedPref.getInt(ARGUMENT_SAVE_NUMBER_OF_PLAYER, 0);
-		for (int i = 0; i < numberOfPlayer; i++)
-		{
+		for (int i = 0; i < numberOfPlayer; i++) {
 			name = sharedPref.getString(ARGUMENT_SAVE_PLAYER_NAME + i, "");
 			score = sharedPref.getInt(ARGUMENT_SAVE_PLAYER_SCORE + i, 0);
 			restorePlayers(name, score, i);
 		}
 	}
-	
-	public void deletePlayers()
-	{
+
+	public void deletePlayers() {
 		int count = 0;
 		// Deleting checked players
-		for (int i = numberOfPlayer - 1; i >= 0; i--)
-		{
-			if (data.get(i).isChecked())
-			{
+		for (int i = numberOfPlayer - 1; i >= 0; i--) {
+			if (data.get(i).isChecked()) {
 				data.remove(i);
 				players.remove(i);
 				count++;
@@ -479,8 +449,7 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 			}
 		}
 		// Create deleted Players.class objects
-		for (int i = 0; i < count; i++)
-		{
+		for (int i = 0; i < count; i++) {
 			Players temp = new Players();
 			String name = "Player" + " " + String.valueOf(Players.getNextNumberOfPlayer());
 			//String name = getResources().getString(R.string.default_name_player) + " " + (i + 1);
@@ -491,12 +460,14 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		// Clear history
 		clearHistory();
 	}
+}
 	
-	//Dialog add player class
-	public class AddPlayerDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, OnFocusChangeListener
+	/*//Dialog add player class
+	public static class AddPlayerDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, OnFocusChangeListener
 	{
 		private Dialog dialog;
 
+		@NonNull
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState)
 		{
@@ -507,6 +478,7 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 				.setView(getActivity().getLayoutInflater().inflate(R.layout.add_player_dialog, null));
 
 			dialog = builder.show();
+			//getActivity().findViewById(R.id.et_add);
 			etAddPlayer = (EditText) dialog.findViewById(R.id.et_add);
 			etAddPlayer.setOnFocusChangeListener(this);
 			return dialog;
@@ -515,8 +487,8 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		@Override
 		public void onClick(DialogInterface dialogInterface, int id)
 		{
-			if (id == Dialog.BUTTON_POSITIVE)
-				addPlayer();
+			if (id == Dialog.BUTTON_POSITIVE);
+				//addPlayer();
 		}
 		
 		// Call soft keyboard when dialog is showing
@@ -528,3 +500,4 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		}
 	}
 }
+*/
