@@ -75,14 +75,14 @@
 	<string name="pref_category_about_title">Other</string>
 	
 		<string name="pref_dialog_about_title">About program</string>
-	    <string name="pref_dialog_about_message"><div aligin="center">This application is used for scoring in games.\nEnjoy your game!\n<B>Created by\nshev4enkostr</B></div></string>
+	    <string name="pref_dialog_about_message"><div aligin="center">This application is used for scoring in games.\nEnjoy your game!\n\n<B>Created by ss.stanislavsky</B></div></string>
 		<string name="pref_dialog_about_summary">About this program</string>
 
 	<!-- Toasts strings -->
 	
     <string name="toast_max_number_of_players">Max number of players!</string>
     <string name="toast_enter_name">Please, enter Player name!</string>
-    <string name="toast_no_name">You are not enter any name...</string>
+    <string name="toast_no_name">You are not enter any name…</string>
     <string name="toast_no_score_entered">You are not enter any points</string>
 	<string name="toast_exit">Press back again to exit from GameScore2</string>
 

@@ -1,13 +1,8 @@
 package su.shev4enkostr.gamescore2;
 
-import android.annotation.SuppressLint;
 import android.os.*;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
@@ -35,7 +30,7 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 	private int undoRedoCount = 0; // count for undo/redo score from history
 
 	private SharedPreferences sharedPref;
-	private int maxNumberOfPlayers; // max number of players from preferences
+	//private int maxNumberOfPlayers; // max number of players from preferences
 	private int numberOfPlayer = 0; // current number of player
 
 	private boolean isBridge;
@@ -297,42 +292,26 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		Activity activity = getActivity();
 		Dialog dialog = new AlertDialog.Builder(activity).setTitle(R.string.add_title)
 				.setView(activity.getLayoutInflater().inflate(R.layout.add_player_dialog, null))
-				.setPositiveButton(R.string.add_btn_ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int id) {
-						addPlayer();
-					}
-				})
-				.setOnKeyListener(new DialogInterface.OnKeyListener() {
-					@Override
-					public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
+				.setPositiveButton(R.string.add_btn_ok, (dialogInterface, i) -> addPlayer())
+				.setOnKeyListener((dialogInterface, keyCode, keyEvent) -> {
 						if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 							addPlayer();
 							dialogInterface.cancel();
 						}
 						return false;
-					}
 				})
-				.setNegativeButton(R.string.add_btn_cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						dialogInterface.cancel();
-					}
-				})
+				.setNegativeButton(R.string.add_btn_cancel, (dialogInterface, i) -> dialogInterface.cancel())
 				.setCancelable(false)
 				.create();
 		dialog.show();
 
 		etAddPlayer = (EditText) dialog.findViewById(R.id.et_add);
-		etAddPlayer.setOnFocusChangeListener(new OnFocusChangeListener() {
-			@Override
-			public void onFocusChange(View view, boolean hasFocus) {
+		etAddPlayer.setOnFocusChangeListener((view, hasFocus) ->  {
 				if (hasFocus)
 					dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-			}
 		});
 	}
-	
+
 	public void addPlayer()
 	{
 		if (etAddPlayer.getText().length() == 0)
