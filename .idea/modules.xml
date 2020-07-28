@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/GameScore.iml" filepath="$PROJECT_DIR$/GameScore.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/easycode/easycode.iml" filepath="$PROJECT_DIR$/easycode/easycode.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gamescore/gamescore.iml" filepath="$PROJECT_DIR$/gamescore/gamescore.iml" />
-      <module fileurl="file://$PROJECT_DIR$/gamescore2/gamescore2.iml" filepath="$PROJECT_DIR$/gamescore2/gamescore2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GameScore2.iml" filepath="$PROJECT_DIR$/GameScore2.iml" group="GameScore2" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="GameScore2/app" />
+      <module fileurl="file://$PROJECT_DIR$/easycode/easycode.iml" filepath="$PROJECT_DIR$/easycode/easycode.iml" group="GameScore2/easycode" />
+      <module fileurl="file://$PROJECT_DIR$/gamescore/gamescore.iml" filepath="$PROJECT_DIR$/gamescore/gamescore.iml" group="GameScore2/gamescore" />
+      <module fileurl="file://$PROJECT_DIR$/gamescore2/gamescore2.iml" filepath="$PROJECT_DIR$/gamescore2/gamescore2.iml" group="GameScore2/gamescore2" />
     </modules>
   </component>
 </project>

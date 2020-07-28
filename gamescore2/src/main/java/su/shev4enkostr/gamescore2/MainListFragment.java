@@ -1,5 +1,6 @@
 package su.shev4enkostr.gamescore2;
 
+import android.annotation.SuppressLint;
 import android.os.*;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.DialogFragment;
@@ -493,6 +494,7 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 	}
 	
 	//Dialog add player class
+	//@SuppressLint("ValidFragment")
 	public class AddPlayerDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, OnFocusChangeListener
 	{
 		private Dialog dialog;
