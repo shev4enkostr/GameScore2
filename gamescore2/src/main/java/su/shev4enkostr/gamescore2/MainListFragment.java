@@ -171,9 +171,8 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 				else
 					Toast.makeText(getActivity(), R.string.toast_max_number_of_players, Toast.LENGTH_SHORT).show();
 				break;*/
-				
-				// Code without checking max number of players from preference
-				new AddPlayerDialogFragment().show(getFragmentManager(), ARGUMENT_ADD_DIALOG);
+
+				showAddPlayerDialog();
 				break;
 			case R.id.action_undo:
 				undoScore();
@@ -202,7 +201,7 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 			outState.putIntegerArrayList((ARGUMENT_SAVE_HISTORY_SCORE + i), historyScore.get(i));
 		}
 	}
-	
+
 	@Override
 	public boolean onCreateActionMode(ActionMode mode, Menu menu)
 	{
@@ -222,7 +221,7 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 	{
 		if (item.getItemId() == R.id.action_delete)
 			deletePlayers();
-		
+
 		mode.finish();
 		return true;
 	}
@@ -235,7 +234,7 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 	public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked)
 	{
 		data.get(position).setChecked(checked);
-		
+
 		int checkedCount = listView.getCheckedItemCount();
 		switch (checkedCount)
 		{
@@ -285,13 +284,53 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		}
 		getActivity().invalidateOptionsMenu();
 	}
-	
+
 	// Restore players from SharedPreference (after then app was killed)
 	public void restorePlayers(String name, int score, int position)
 	{
 		players.get(position).setName(name);
 		players.get(position).setScore(score);
 		data.add(position, players.get(position));
+	}
+
+	private void showAddPlayerDialog() {
+		Activity activity = getActivity();
+		Dialog dialog = new AlertDialog.Builder(activity).setTitle(R.string.add_title)
+				.setView(activity.getLayoutInflater().inflate(R.layout.add_player_dialog, null))
+				.setPositiveButton(R.string.add_btn_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int id) {
+						addPlayer();
+					}
+				})
+				.setOnKeyListener(new DialogInterface.OnKeyListener() {
+					@Override
+					public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
+						if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+							addPlayer();
+							dialogInterface.cancel();
+						}
+						return false;
+					}
+				})
+				.setNegativeButton(R.string.add_btn_cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						dialogInterface.cancel();
+					}
+				})
+				.setCancelable(false)
+				.create();
+		dialog.show();
+
+		etAddPlayer = (EditText) dialog.findViewById(R.id.et_add);
+		etAddPlayer.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View view, boolean hasFocus) {
+				if (hasFocus)
+					dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+			}
+		});
 	}
 	
 	public void addPlayer()
@@ -491,42 +530,5 @@ public class MainListFragment extends Fragment implements View.OnClickListener, 
 		players.trimToSize();
 		// Clear history
 		clearHistory();
-	}
-	
-	//Dialog add player class
-	//@SuppressLint("ValidFragment")
-	public class AddPlayerDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, OnFocusChangeListener
-	{
-		private Dialog dialog;
-
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState)
-		{
-			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-				.setTitle(R.string.add_title)
-				.setPositiveButton(R.string.add_btn_ok, this)
-				.setNegativeButton(R.string.add_btn_cancel, this)
-				.setView(getActivity().getLayoutInflater().inflate(R.layout.add_player_dialog, null));
-
-			dialog = builder.show();
-			etAddPlayer = (EditText) dialog.findViewById(R.id.et_add);
-			etAddPlayer.setOnFocusChangeListener(this);
-			return dialog;
-		}
-
-		@Override
-		public void onClick(DialogInterface dialogInterface, int id)
-		{
-			if (id == Dialog.BUTTON_POSITIVE)
-				addPlayer();
-		}
-		
-		// Call soft keyboard when dialog is showing
-		@Override
-		public void onFocusChange(View view, boolean hasFocus)
-		{
-			if (hasFocus)
-				dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-		}
 	}
 }
